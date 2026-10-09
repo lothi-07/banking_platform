@@ -39,10 +39,7 @@ KEY FEATURES & SECURITY:
    - Official Statement Generator with print / export slip modal.
    - Security Controls: Card Freeze / Lock toggle & PIN Change.
 
-3. Staff / Admin Portal:
-   - Master bank ledger, account deletion, and system reserves overview.
-
-4. Accessibility & Aesthetics:
+3. Accessibility & Aesthetics:
    - Dark Luxury Glassmorphism & Light Pearl themes with instant toggle.
    - Web Audio tactile sound effects.
    - Mask/reveal privacy eye for account balances.
