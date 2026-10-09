@@ -1,0 +1,2393 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Apex Reserve Bank | Secure Digital Banking</title>
+  <meta name="description"
+    content="Institutional-grade digital banking. Manage your savings and current accounts with real-time transfers, debit card controls, and military-grade security.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap"
+    rel="stylesheet">
+
+  <style>
+    /* ==========================================================================
+   DESIGN TOKENS & CSS VARIABLES
+   ========================================================================== */
+    :root {
+      --font-main: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+      --font-mono: 'Space Grotesk', 'Courier New', monospace;
+
+      /* Dark Theme (Default Luxury Obsidian) */
+      --bg-deep: #07090e;
+      --bg-surface: #0f141f;
+      --bg-elevated: #161e30;
+      --bg-card: rgba(18, 24, 38, 0.78);
+      --bg-card-hover: rgba(26, 35, 54, 0.88);
+
+      --border-subtle: rgba(255, 255, 255, 0.08);
+      --border-focus: #3b82f6;
+      --border-highlight: rgba(59, 130, 246, 0.35);
+
+      --text-main: #f3f6fc;
+      --text-muted: #8d9bb0;
+      --text-dim: #5c687e;
+
+      /* Brand Accents */
+      --brand-primary: #2563eb;
+      --brand-accent: #38bdf8;
+      --brand-gradient: linear-gradient(135deg, #2563eb 0%, #1d4ed8 50%, #0284c7 100%);
+      --gold-gradient: linear-gradient(135deg, #f59e0b 0%, #d97706 50%, #b45309 100%);
+      --card-mesh: radial-gradient(at 0% 0%, rgba(37, 99, 235, 0.25) 0px, transparent 50%),
+        radial-gradient(at 100% 100%, rgba(56, 189, 248, 0.15) 0px, transparent 50%);
+
+      /* Feedback Colors */
+      --ok: #10b981;
+      --ok-bg: rgba(16, 185, 129, 0.12);
+      --bad: #ef4444;
+      --bad-bg: rgba(239, 68, 68, 0.12);
+      --warn: #f59e0b;
+      --warn-bg: rgba(245, 158, 11, 0.12);
+
+      --shadow-sm: 0 4px 12px rgba(0, 0, 0, 0.25);
+      --shadow-lg: 0 20px 40px -15px rgba(0, 0, 0, 0.6);
+      --shadow-glow: 0 0 25px rgba(37, 99, 235, 0.22);
+
+      --radius-sm: 8px;
+      --radius-md: 14px;
+      --radius-lg: 20px;
+      --radius-full: 9999px;
+      --transition: all 0.24s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    [data-theme="light"] {
+      --bg-deep: #f4f6fa;
+      --bg-surface: #ffffff;
+      --bg-elevated: #e9eef7;
+      --bg-card: rgba(255, 255, 255, 0.88);
+      --bg-card-hover: #ffffff;
+
+      --border-subtle: rgba(0, 0, 0, 0.08);
+      --border-focus: #2563eb;
+      --border-highlight: rgba(37, 99, 235, 0.25);
+
+      --text-main: #0c1424;
+      --text-muted: #596780;
+      --text-dim: #8c9ba5;
+
+      --shadow-sm: 0 4px 12px rgba(12, 20, 36, 0.06);
+      --shadow-lg: 0 20px 40px -15px rgba(12, 20, 36, 0.1);
+      --shadow-glow: 0 0 25px rgba(37, 99, 235, 0.15);
+    }
+
+    /* ==========================================================================
+   RESET & BASE STYLES
+   ========================================================================== */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    body {
+      font-family: var(--font-main);
+      background-color: var(--bg-deep);
+      color: var(--text-main);
+      min-height: 100vh;
+      line-height: 1.5;
+      background-image:
+        radial-gradient(circle at 15% 10%, rgba(37, 99, 235, 0.08) 0%, transparent 40%),
+        radial-gradient(circle at 85% 85%, rgba(56, 189, 248, 0.06) 0%, transparent 40%);
+      background-attachment: fixed;
+      overflow-x: hidden;
+    }
+
+    button,
+    input,
+    select {
+      font-family: inherit;
+      color: inherit;
+    }
+
+    a {
+      color: var(--brand-accent);
+      text-decoration: none;
+    }
+
+    /* ==========================================================================
+   TOP GLOBAL HEADER
+   ========================================================================== */
+    header.app-header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      background: var(--bg-card);
+      border-bottom: 1px solid var(--border-subtle);
+      padding: 14px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .brand-wrap {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      cursor: pointer;
+    }
+
+    .brand-crest {
+      width: 38px;
+      height: 38px;
+      border-radius: var(--radius-sm);
+      background: var(--brand-gradient);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 0 16px rgba(37, 99, 235, 0.4);
+    }
+
+    .brand-crest svg {
+      width: 22px;
+      height: 22px;
+      fill: #fff;
+    }
+
+    .brand-titles h1 {
+      font-size: 17px;
+      font-weight: 800;
+      letter-spacing: -0.3px;
+      line-height: 1.2;
+    }
+
+    .brand-titles span {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: var(--text-muted);
+      font-weight: 600;
+    }
+
+    .header-badges {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .security-pill {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 12px;
+      background: rgba(16, 185, 129, 0.08);
+      border: 1px solid rgba(16, 185, 129, 0.25);
+      border-radius: var(--radius-full);
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--ok);
+    }
+
+    .pulse-dot {
+      width: 8px;
+      height: 8px;
+      background: var(--ok);
+      border-radius: 50%;
+      box-shadow: 0 0 8px var(--ok);
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0% {
+        transform: scale(0.9);
+        opacity: 0.7;
+      }
+
+      50% {
+        transform: scale(1.3);
+        opacity: 1;
+      }
+
+      100% {
+        transform: scale(0.9);
+        opacity: 0.7;
+      }
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .icon-btn {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-sm);
+      padding: 8px 12px;
+      font-size: 13px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .icon-btn:hover {
+      background: var(--bg-elevated);
+      border-color: var(--border-highlight);
+    }
+
+    .user-badge-wrap {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 4px 10px;
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-full);
+    }
+
+    .user-avatar {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      background: var(--brand-gradient);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 13px;
+      color: #fff;
+    }
+
+    .user-info {
+      font-size: 13px;
+      font-weight: 600;
+      line-height: 1.2;
+    }
+
+    .user-info small {
+      display: block;
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+
+    .btn-signout {
+      background: transparent;
+      border: none;
+      color: var(--bad);
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      padding: 4px 8px;
+      border-radius: var(--radius-sm);
+    }
+
+    .btn-signout:hover {
+      background: var(--bad-bg);
+    }
+
+    /* ==========================================================================
+   APP CONTAINER & VIEWS
+   ========================================================================== */
+    .main-wrapper {
+      max-width: 1240px;
+      margin: 28px auto;
+      padding: 0 20px;
+    }
+
+    .view-section {
+      display: none;
+      animation: fadeIn 0.3s ease-out;
+    }
+
+    .view-section.active {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(8px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* ==========================================================================
+   AUTHENTICATION VIEW (LOGIN & REGISTRATION)
+   ========================================================================== */
+    .auth-container {
+      max-width: 520px;
+      margin: 30px auto;
+    }
+
+    .auth-hero-banner {
+      text-align: center;
+      margin-bottom: 24px;
+    }
+
+    .auth-hero-banner h2 {
+      font-size: 26px;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      margin-bottom: 6px;
+    }
+
+    .auth-hero-banner p {
+      color: var(--text-muted);
+      font-size: 14px;
+    }
+
+    .auth-card {
+      background: var(--bg-card);
+      backdrop-filter: blur(20px);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      padding: 32px 28px;
+      box-shadow: var(--shadow-lg);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .auth-card::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: var(--brand-gradient);
+    }
+
+    .auth-tabs {
+      display: flex;
+      background: var(--bg-surface);
+      border-radius: var(--radius-md);
+      padding: 4px;
+      margin-bottom: 24px;
+      border: 1px solid var(--border-subtle);
+    }
+
+    .auth-tab-btn {
+      flex: 1;
+      padding: 10px 14px;
+      border: none;
+      background: transparent;
+      border-radius: var(--radius-sm);
+      font-size: 13.5px;
+      font-weight: 600;
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .auth-tab-btn.active {
+      background: var(--brand-primary);
+      color: #fff;
+      box-shadow: 0 2px 8px rgba(37, 99, 235, 0.4);
+    }
+
+    .form-group {
+      margin-bottom: 18px;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 12.5px;
+      font-weight: 600;
+      color: var(--text-muted);
+      margin-bottom: 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .input-with-icon {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+
+    .input-with-icon input,
+    .input-with-icon select,
+    .form-input {
+      width: 100%;
+      padding: 12px 14px;
+      padding-left: 40px;
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      background: var(--bg-surface);
+      color: var(--text-main);
+      font-size: 14.5px;
+      transition: var(--transition);
+    }
+
+    .input-with-icon input:focus,
+    .input-with-icon select:focus,
+    .form-input:focus {
+      outline: none;
+      border-color: var(--border-focus);
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+    }
+
+    .input-icon {
+      position: absolute;
+      left: 14px;
+      color: var(--text-dim);
+      pointer-events: none;
+      display: flex;
+    }
+
+    .input-toggle-btn {
+      position: absolute;
+      right: 12px;
+      background: transparent;
+      border: none;
+      color: var(--text-dim);
+      cursor: pointer;
+      padding: 4px;
+    }
+
+    .primary-btn {
+      width: 100%;
+      padding: 13px;
+      background: var(--brand-gradient);
+      border: none;
+      border-radius: var(--radius-md);
+      color: #fff;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 4px 16px rgba(37, 99, 235, 0.35);
+      transition: var(--transition);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .primary-btn:hover {
+      filter: brightness(1.1);
+      transform: translateY(-1px);
+    }
+
+    .primary-btn:active {
+      transform: translateY(0);
+    }
+
+    /* Fast Demo Logins Section */
+    .demo-logins-box {
+      margin-top: 26px;
+      padding-top: 20px;
+      border-top: 1px dashed var(--border-subtle);
+    }
+
+    .demo-title {
+      font-size: 11.5px;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: var(--text-muted);
+      font-weight: 700;
+      margin-bottom: 12px;
+      text-align: center;
+    }
+
+    .demo-pills-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .demo-pill-btn {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 10px 12px;
+      text-align: left;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .demo-pill-btn:hover {
+      background: var(--bg-elevated);
+      border-color: var(--border-highlight);
+      transform: translateY(-2px);
+    }
+
+    .demo-pill-btn strong {
+      display: block;
+      font-size: 13px;
+      color: var(--text-main);
+    }
+
+    .demo-pill-btn span {
+      font-size: 11.5px;
+      color: var(--brand-accent);
+      font-family: var(--font-mono);
+    }
+
+    /* Account type cards in registration */
+    .type-selector-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 18px;
+    }
+
+    .type-option-card {
+      border: 1px solid var(--border-subtle);
+      background: var(--bg-surface);
+      border-radius: var(--radius-md);
+      padding: 14px;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .type-option-card.selected {
+      border-color: var(--brand-primary);
+      background: rgba(37, 99, 235, 0.08);
+      box-shadow: 0 0 0 2px var(--brand-primary);
+    }
+
+    .type-option-card h4 {
+      font-size: 14px;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+
+    .type-option-card p {
+      font-size: 11.5px;
+      color: var(--text-muted);
+    }
+
+    /* ==========================================================================
+   CUSTOMER DASHBOARD VIEW
+   ========================================================================== */
+    .dash-header-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 22px;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .dash-welcome h2 {
+      font-size: 24px;
+      font-weight: 800;
+      letter-spacing: -0.4px;
+    }
+
+    .dash-welcome p {
+      font-size: 13.5px;
+      color: var(--text-muted);
+    }
+
+    .account-security-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 10px;
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-full);
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    /* HERO SECTION: DEBIT CARD + WEALTH SUMMARY */
+    .hero-deck {
+      display: grid;
+      grid-template-columns: 380px 1fr;
+      gap: 22px;
+      margin-bottom: 26px;
+    }
+
+    @media (max-width: 900px) {
+      .hero-deck {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* 3D Glassmorphic Debit Card */
+    .virtual-card-wrap {
+      perspective: 1000px;
+    }
+
+    .debit-card {
+      width: 100%;
+      height: 224px;
+      border-radius: 18px;
+      padding: 24px;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      box-shadow: 0 16px 36px rgba(0, 0, 0, 0.45), 0 0 0 1px rgba(255, 255, 255, 0.12);
+      background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+      color: #ffffff;
+      overflow: hidden;
+      transition: transform 0.3s ease;
+    }
+
+    .debit-card:hover {
+      transform: translateY(-4px) rotateX(2deg);
+    }
+
+    .debit-card.card-savings {
+      background: linear-gradient(135deg, #1e3a8a 0%, #0f172a 60%, #1e1b4b 100%);
+    }
+
+    .debit-card.card-current {
+      background: linear-gradient(135deg, #18181b 0%, #09090b 60%, #27272a 100%);
+      border: 1px solid rgba(245, 158, 11, 0.3);
+    }
+
+    .debit-card.is-frozen {
+      filter: grayscale(0.9) contrast(0.85);
+      box-shadow: 0 0 0 2px var(--bad);
+    }
+
+    .card-frozen-watermark {
+      display: none;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) rotate(-15deg);
+      background: rgba(239, 68, 68, 0.9);
+      color: #fff;
+      padding: 6px 20px;
+      border-radius: var(--radius-sm);
+      font-weight: 800;
+      font-size: 15px;
+      letter-spacing: 2px;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.5);
+      z-index: 10;
+    }
+
+    .debit-card.is-frozen .card-frozen-watermark {
+      display: block;
+    }
+
+    .card-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .card-bank-brand {
+      font-size: 14px;
+      font-weight: 800;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .card-network {
+      font-size: 12px;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: var(--radius-full);
+      background: rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(4px);
+    }
+
+    .card-chip-row {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .emv-chip {
+      width: 42px;
+      height: 32px;
+      border-radius: 6px;
+      background: linear-gradient(135deg, #fbbf24 0%, #d97706 100%);
+      border: 1px solid rgba(255, 255, 255, 0.4);
+      position: relative;
+      box-shadow: inset 0 0 4px rgba(0, 0, 0, 0.3);
+    }
+
+    .contactless-icon svg {
+      width: 22px;
+      height: 22px;
+      fill: rgba(255, 255, 255, 0.85);
+    }
+
+    .card-number-display {
+      font-family: var(--font-mono);
+      font-size: 19px;
+      font-weight: 600;
+      letter-spacing: 2.5px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .copy-acc-btn {
+      background: rgba(255, 255, 255, 0.15);
+      border: none;
+      border-radius: 4px;
+      color: #fff;
+      padding: 2px 6px;
+      font-size: 11px;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .copy-acc-btn:hover {
+      background: rgba(255, 255, 255, 0.3);
+    }
+
+    .card-bottom {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+    }
+
+    .card-holder small,
+    .card-expiry small {
+      display: block;
+      font-size: 9px;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      opacity: 0.7;
+    }
+
+    .card-holder span {
+      font-size: 13.5px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+    }
+
+    .card-expiry span {
+      font-family: var(--font-mono);
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    /* WEALTH STATS TILES */
+    .wealth-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+    }
+
+    .wealth-stat-card {
+      background: var(--bg-card);
+      backdrop-filter: blur(16px);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      padding: 20px;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      box-shadow: var(--shadow-sm);
+      transition: var(--transition);
+    }
+
+    .wealth-stat-card:hover {
+      border-color: var(--border-highlight);
+      background: var(--bg-card-hover);
+    }
+
+    .stat-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 10px;
+    }
+
+    .stat-label {
+      font-size: 12.5px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+      color: var(--text-muted);
+    }
+
+    .stat-icon {
+      width: 32px;
+      height: 32px;
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .stat-value {
+      font-family: var(--font-mono);
+      font-size: 26px;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+      color: var(--text-main);
+    }
+
+    .stat-subtext {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-top: 6px;
+    }
+
+    /* ==========================================================================
+   MINI BANK ACTION HUB (TABS & WORKSPACES)
+   ========================================================================== */
+    .hub-container {
+      background: var(--bg-card);
+      backdrop-filter: blur(16px);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-lg);
+      overflow: hidden;
+      margin-bottom: 30px;
+    }
+
+    .hub-nav-tabs {
+      display: flex;
+      border-bottom: 1px solid var(--border-subtle);
+      background: var(--bg-surface);
+      overflow-x: auto;
+    }
+
+    .hub-tab-btn {
+      padding: 16px 20px;
+      background: transparent;
+      border: none;
+      border-bottom: 2px solid transparent;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-muted);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      white-space: nowrap;
+      transition: var(--transition);
+    }
+
+    .hub-tab-btn:hover {
+      color: var(--text-main);
+      background: rgba(255, 255, 255, 0.02);
+    }
+
+    .hub-tab-btn.active {
+      color: var(--brand-accent);
+      border-bottom-color: var(--brand-accent);
+      background: rgba(56, 189, 248, 0.04);
+    }
+
+    .hub-content-pane {
+      padding: 28px;
+      display: none;
+    }
+
+    .hub-content-pane.active {
+      display: block;
+    }
+
+    /* QUICK AMOUNT CHIPS */
+    .amount-chips-row {
+      display: flex;
+      gap: 8px;
+      margin-top: 8px;
+      flex-wrap: wrap;
+    }
+
+    .chip-btn {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-sm);
+      padding: 6px 12px;
+      font-size: 12px;
+      font-weight: 600;
+      font-family: var(--font-mono);
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .chip-btn:hover {
+      border-color: var(--brand-accent);
+      color: var(--text-main);
+    }
+
+    /* RECIPIENT VERIFY BADGE */
+    .recipient-verified-box {
+      display: none;
+      align-items: center;
+      gap: 8px;
+      margin-top: 8px;
+      padding: 8px 12px;
+      border-radius: var(--radius-sm);
+      background: var(--ok-bg);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      font-size: 12.5px;
+      color: var(--ok);
+      font-weight: 600;
+    }
+
+    .recipient-verified-box.visible {
+      display: flex;
+    }
+
+    /* TRANSACTION LEDGER / PASSBOOK TABLE */
+    .ledger-controls {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 18px;
+      flex-wrap: wrap;
+    }
+
+    .ledger-filters {
+      display: flex;
+      gap: 6px;
+    }
+
+    .filter-btn {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-sm);
+      padding: 6px 12px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .filter-btn.active {
+      background: var(--brand-primary);
+      border-color: var(--brand-primary);
+      color: #fff;
+    }
+
+    .table-responsive {
+      width: 100%;
+      overflow-x: auto;
+    }
+
+    table.ledger-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13.5px;
+    }
+
+    table.ledger-table th {
+      text-align: left;
+      padding: 12px 14px;
+      color: var(--text-muted);
+      font-size: 11.5px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+      border-bottom: 1px solid var(--border-subtle);
+    }
+
+    table.ledger-table td {
+      padding: 14px;
+      border-bottom: 1px solid var(--border-subtle);
+      vertical-align: middle;
+    }
+
+    .tx-type-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 3px 8px;
+      border-radius: var(--radius-full);
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+
+    .tx-inflow {
+      background: var(--ok-bg);
+      color: var(--ok);
+    }
+
+    .tx-outflow {
+      background: var(--bad-bg);
+      color: var(--bad);
+    }
+
+    .tx-neutral {
+      background: rgba(56, 189, 248, 0.12);
+      color: var(--brand-accent);
+    }
+
+    /* ==========================================================================
+   ADMIN / MASTER PORTAL VIEW
+   ========================================================================== */
+    .admin-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      padding: 24px;
+      margin-top: 24px;
+    }
+
+    .admin-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 16px;
+    }
+
+    /* TOAST NOTIFICATION CONTAINER */
+    #toast-container {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      z-index: 9999;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      pointer-events: none;
+    }
+
+    .toast {
+      pointer-events: auto;
+      min-width: 300px;
+      max-width: 420px;
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 14px 18px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      animation: slideToast 0.3s ease-out;
+    }
+
+    @keyframes slideToast {
+      from {
+        transform: translateX(50px);
+        opacity: 0;
+      }
+
+      to {
+        transform: translateX(0);
+        opacity: 1;
+      }
+    }
+
+    .toast-ok {
+      border-left: 4px solid var(--ok);
+    }
+
+    .toast-bad {
+      border-left: 4px solid var(--bad);
+    }
+
+    .toast-info {
+      border-left: 4px solid var(--brand-accent);
+    }
+
+    /* STATEMENT PRINT SLIP MODAL */
+    .statement-modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.7);
+      backdrop-filter: blur(8px);
+      z-index: 500;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .statement-modal-overlay.active {
+      display: flex;
+    }
+
+    .statement-paper {
+      background: #ffffff;
+      color: #0f172a;
+      width: 100%;
+      max-width: 650px;
+      border-radius: var(--radius-md);
+      padding: 36px;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+      max-height: 90vh;
+      overflow-y: auto;
+      position: relative;
+    }
+
+    @media print {
+      body * {
+        visibility: hidden;
+      }
+
+      .statement-paper,
+      .statement-paper * {
+        visibility: visible;
+      }
+
+      .statement-paper {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        padding: 0;
+        box-shadow: none;
+      }
+
+      .no-print {
+        display: none !important;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- ========================================================================
+     TOP NAVIGATION BAR
+     ======================================================================== -->
+  <header class="app-header">
+    <div class="brand-wrap" onclick="navigateHome()" title="Apex Reserve Bank">
+      <div class="brand-crest">
+        <svg viewBox="0 0 24 24">
+          <path
+            d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 10.99h7c-.53 4.12-3.28 7.79-7 8.94V12H5V6.3l7-3.11v8.8z" />
+        </svg>
+      </div>
+      <div class="brand-titles">
+        <h1>APEX RESERVE</h1>
+        <span>Institutional Digital Banking</span>
+      </div>
+    </div>
+
+    <div class="header-actions">
+      <!-- Sound toggle -->
+      <button class="icon-btn" id="audioToggleBtn" onclick="toggleAudio()" title="Sound Effects">
+        <span id="audioIcon">🔊</span>
+      </button>
+      <!-- Theme Toggle -->
+      <button class="icon-btn" id="themeToggleBtn" onclick="toggleTheme()" title="Switch Light/Dark Mode">
+        <span id="themeIcon">☀️</span>
+      </button>
+      <!-- User session indicator -->
+      <div id="sessionHeaderSlot"></div>
+    </div>
+  </header>
+
+  <!-- ========================================================================
+     MAIN WORKSPACE
+     ======================================================================== -->
+  <main class="main-wrapper">
+
+    <!-- ====================================================================
+       VIEW 1: AUTHENTICATION (LOGIN & REGISTRATION GATEWAY)
+       ==================================================================== -->
+    <section id="view-auth" class="view-section active">
+      <div class="auth-container">
+        <div class="auth-hero-banner">
+          <h2>Secure Digital Gateway</h2>
+          <p>Access your accounts, instant transfers, and wealth management.</p>
+        </div>
+
+        <div class="auth-card">
+          <div class="auth-tabs">
+            <button class="auth-tab-btn active" id="tabBtnLogin" onclick="switchAuthTab('login')">Sign In</button>
+            <button class="auth-tab-btn" id="tabBtnRegister" onclick="switchAuthTab('register')">Open New
+              Account</button>
+          </div>
+
+          <!-- LOGIN FORM -->
+          <form id="loginForm" onsubmit="handleLogin(event)">
+            <div class="form-group">
+              <label for="loginId">Account No or Registered Phone</label>
+              <div class="input-with-icon">
+                <span class="input-icon">👤</span>
+                <input type="text" id="loginId" placeholder="e.g. ACC1001 or 9876543210" required
+                  autocomplete="username">
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="loginPin">4-Digit Security PIN</label>
+              <div class="input-with-icon">
+                <span class="input-icon">🔒</span>
+                <input type="password" id="loginPin" placeholder="••••" maxlength="8" required
+                  autocomplete="current-password">
+                <button type="button" class="input-toggle-btn" onclick="togglePinVisibility('loginPin')">👁️</button>
+              </div>
+            </div>
+
+            <button type="submit" class="primary-btn" id="loginSubmitBtn">
+              <span>Access Account</span>
+              <span>→</span>
+            </button>
+          </form>
+
+          <!-- REGISTRATION FORM -->
+          <form id="registerForm" style="display:none;" onsubmit="handleRegister(event)">
+            <div class="form-group">
+              <label for="regName">Full Legal Name</label>
+              <div class="input-with-icon">
+                <span class="input-icon">📝</span>
+                <input type="text" id="regName" placeholder="e.g. Vikram Malhotra" required>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="regPhone">Mobile Phone</label>
+              <div class="input-with-icon">
+                <span class="input-icon">📱</span>
+                <input type="tel" id="regPhone" placeholder="e.g. 9811223344" required>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label>Select Account Type</label>
+              <div class="type-selector-grid">
+                <div class="type-option-card selected" id="optSavings" onclick="selectAccountType('savings')">
+                  <h4>Savings Account</h4>
+                  <p>4.00% p.a. interest. Min balance ₹500.</p>
+                </div>
+                <div class="type-option-card" id="optCurrent" onclick="selectAccountType('current')">
+                  <h4>Current Account</h4>
+                  <p>₹10,000 Overdraft limit. 0% interest.</p>
+                </div>
+              </div>
+              <input type="hidden" id="regType" value="savings">
+            </div>
+
+            <div class="form-group">
+              <label for="regAmount">Opening Deposit (Rs.)</label>
+              <div class="input-with-icon">
+                <span class="input-icon">₹</span>
+                <input type="number" id="regAmount" value="5000" min="0" required>
+              </div>
+              <small style="color:var(--text-muted); font-size:11.5px;" id="regMinNotice">Minimum opening deposit for
+                Savings: ₹500</small>
+            </div>
+
+            <div class="form-group">
+              <label for="regPin">Create 4-Digit Security PIN</label>
+              <div class="input-with-icon">
+                <span class="input-icon">🔑</span>
+                <input type="password" id="regPin" placeholder="4-digit PIN (e.g. 1234)" maxlength="6" required>
+                <button type="button" class="input-toggle-btn" onclick="togglePinVisibility('regPin')">👁️</button>
+              </div>
+            </div>
+
+            <button type="submit" class="primary-btn" id="regSubmitBtn">
+              <span>Create & Log In</span>
+              <span>→</span>
+            </button>
+          </form>
+
+          <!-- Fast Demo Logins Section -->
+          <div class="demo-logins-box">
+            <div class="demo-title">⚡ Instant Demo Fast-Logins</div>
+            <div class="demo-pills-grid">
+              <button type="button" class="demo-pill-btn" onclick="quickFillLogin('ACC1001', '1234')">
+                <strong>Rahul Verma</strong>
+                <span>ACC1001 • PIN: 1234 (Savings)</span>
+              </button>
+              <button type="button" class="demo-pill-btn" onclick="quickFillLogin('ACC1002', '5678')">
+                <strong>Priya Patel</strong>
+                <span>ACC1002 • PIN: 5678 (Current)</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ====================================================================
+       VIEW 2: CUSTOMER DASHBOARD (AUTHENTICATED)
+       ==================================================================== -->
+    <section id="view-dashboard" class="view-section">
+      <!-- Header Welcome & Badges -->
+      <div class="dash-header-bar">
+        <div class="dash-welcome">
+          <h2>Welcome back, <span id="dashHolderName">Customer</span> 👋</h2>
+          <p>Personal Banking Workspace • Registered Phone: <span id="dashPhone">...</span></p>
+        </div>
+        <div style="display:flex; gap:10px; align-items:center;">
+          <span class="account-security-tag" id="dashAccountTypeTag">SAVINGS PLATINUM</span>
+          <button class="icon-btn" onclick="toggleBalancePrivacy()" title="Mask / Reveal Balance">
+            <span id="privacyEyeIcon">👁️</span> Hide Balance
+          </button>
+        </div>
+      </div>
+
+      <!-- HERO DECK: VIRTUAL DEBIT CARD & WEALTH SUMMARY -->
+      <div class="hero-deck">
+        <!-- 3D Virtual Debit Card -->
+        <div class="virtual-card-wrap">
+          <div class="debit-card card-savings" id="virtualCardElement">
+            <div class="card-frozen-watermark">CARD FROZEN</div>
+            <div class="card-top">
+              <div class="card-bank-brand">
+                <svg style="width:16px;height:16px;fill:currentColor;" viewBox="0 0 24 24">
+                  <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z" />
+                </svg>
+                APEX RESERVE
+              </div>
+              <div class="card-network" id="cardTierBadge">SAVINGS</div>
+            </div>
+
+            <div class="card-chip-row">
+              <div class="emv-chip"></div>
+              <div class="contactless-icon">
+                <svg viewBox="0 0 24 24">
+                  <path
+                    d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-5-8a5 5 0 0 1 5-5v2a3 3 0 0 0-3 3H7zm0 4a9 9 0 0 1 9-9v2a7 7 0 0 0-7 7H7z" />
+                </svg>
+              </div>
+            </div>
+
+            <div class="card-number-display">
+              <span id="cardAccNumber">ACC1001</span>
+              <button class="copy-acc-btn" onclick="copyAccountNumber()" title="Copy Account No">Copy</button>
+            </div>
+
+            <div class="card-bottom">
+              <div class="card-holder">
+                <small>Account Holder</small>
+                <span id="cardHolderName">RAHUL VERMA</span>
+              </div>
+              <div class="card-expiry">
+                <small>Valid Thru</small>
+                <span>10/31</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Wealth & Balance Overview Grid -->
+        <div class="wealth-grid">
+          <div class="wealth-stat-card">
+            <div class="stat-header">
+              <span class="stat-label">Net Balance</span>
+              <div class="stat-icon" style="background:rgba(37, 99, 235, 0.15); color:var(--brand-accent);">💰</div>
+            </div>
+            <div class="stat-value" id="statBalance">Rs.0.00</div>
+            <div class="stat-subtext" id="statBalanceSub">Real-time ledger value</div>
+          </div>
+
+          <div class="wealth-stat-card">
+            <div class="stat-header">
+              <span class="stat-label">Available to Spend</span>
+              <div class="stat-icon" style="background:rgba(16, 185, 129, 0.15); color:var(--ok);">⚡</div>
+            </div>
+            <div class="stat-value" id="statAvailable">Rs.0.00</div>
+            <div class="stat-subtext" id="statAvailableSub">With min bal/overdraft factored</div>
+          </div>
+
+          <div class="wealth-stat-card">
+            <div class="stat-header">
+              <span class="stat-label">Annual Growth</span>
+              <div class="stat-icon" style="background:rgba(245, 158, 11, 0.15); color:var(--warn);">📈</div>
+            </div>
+            <div class="stat-value" id="statInterest">Rs.0.00</div>
+            <div class="stat-subtext" id="statInterestSub">4.0% p.a. compound savings rate</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ==================================================================
+         ACCESSIBLE MINI BANK ACTION HUB (TABS)
+         ================================================================== -->
+      <div class="hub-container">
+        <nav class="hub-nav-tabs" role="tablist">
+          <button class="hub-tab-btn active" role="tab" id="hubTabTransfer" onclick="switchHubPane('transfer')">
+            <span>💸</span> Transfer Money
+          </button>
+          <button class="hub-tab-btn" role="tab" id="hubTabDeposit" onclick="switchHubPane('deposit')">
+            <span>💳</span> Deposit & Withdraw
+          </button>
+          <button class="hub-tab-btn" role="tab" id="hubTabLedger" onclick="switchHubPane('ledger')">
+            <span>📜</span> Passbook & Ledger
+          </button>
+          <button class="hub-tab-btn" role="tab" id="hubTabInterest" onclick="switchHubPane('interest')">
+            <span>📈</span> Interest Calculator
+          </button>
+          <button class="hub-tab-btn" role="tab" id="hubTabSecurity" onclick="switchHubPane('security')">
+            <span>🛡️</span> Security Controls
+          </button>
+        </nav>
+
+        <!-- PANE 1: INSTANT TRANSFER -->
+        <div class="hub-content-pane active" id="pane-transfer">
+          <h3 style="font-size:18px; margin-bottom:14px;">Instant Account-to-Account Transfer</h3>
+          <p style="color:var(--text-muted); font-size:13.5px; margin-bottom:20px;">
+            Send money securely to any Apex account with zero transaction fees and real-time recipient verification.
+          </p>
+
+          <form onsubmit="handleTransfer(event)" style="max-width:520px;">
+            <div class="form-group">
+              <label for="tfRecipient">Recipient Account No</label>
+              <div class="input-with-icon">
+                <span class="input-icon">🎯</span>
+                <input type="text" id="tfRecipient" placeholder="e.g. ACC1002" required
+                  oninput="checkRecipientDebounced(this.value)">
+              </div>
+              <div class="recipient-verified-box" id="recipientVerifiedBox">
+                <span>✓</span> <span id="recipientVerifiedText">Verified: Priya Patel (CURRENT)</span>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="tfAmount">Transfer Amount (Rs.)</label>
+              <div class="input-with-icon">
+                <span class="input-icon">₹</span>
+                <input type="number" id="tfAmount" min="1" step="any" placeholder="0.00" required>
+              </div>
+              <div class="amount-chips-row">
+                <button type="button" class="chip-btn" onclick="setTransferAmount(500)">+₹500</button>
+                <button type="button" class="chip-btn" onclick="setTransferAmount(1000)">+₹1,000</button>
+                <button type="button" class="chip-btn" onclick="setTransferAmount(5000)">+₹5,000</button>
+                <button type="button" class="chip-btn" onclick="setTransferAmount(10000)">+₹10,000</button>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="tfPin">Confirm Your 4-Digit Security PIN</label>
+              <div class="input-with-icon">
+                <span class="input-icon">🔒</span>
+                <input type="password" id="tfPin" placeholder="••••" maxlength="6" required>
+                <button type="button" class="input-toggle-btn" onclick="togglePinVisibility('tfPin')">👁️</button>
+              </div>
+            </div>
+
+            <button type="submit" class="primary-btn" id="transferSubmitBtn">
+              <span>Authorize & Transfer Funds</span>
+              <span>→</span>
+            </button>
+          </form>
+        </div>
+
+        <!-- PANE 2: DEPOSIT & WITHDRAW -->
+        <div class="hub-content-pane" id="pane-deposit">
+          <h3 style="font-size:18px; margin-bottom:14px;">Cash Management & Direct Debits</h3>
+
+          <div style="display:flex; gap:10px; margin-bottom:20px;">
+            <button type="button" class="filter-btn active" id="btnModeDeposit"
+              onclick="switchCashMode('deposit')">Deposit Funds</button>
+            <button type="button" class="filter-btn" id="btnModeWithdraw" onclick="switchCashMode('withdraw')">Withdraw
+              Cash</button>
+          </div>
+
+          <form onsubmit="handleCashAction(event)" style="max-width:520px;">
+            <input type="hidden" id="cashMode" value="deposit">
+
+            <div class="form-group">
+              <label id="cashAmountLabel">Deposit Amount (Rs.)</label>
+              <div class="input-with-icon">
+                <span class="input-icon">₹</span>
+                <input type="number" id="cashAmount" min="1" step="any" placeholder="0.00" required
+                  oninput="calcRemainingBalance()">
+              </div>
+              <div class="amount-chips-row">
+                <button type="button" class="chip-btn" onclick="setCashAmount(500)">+₹500</button>
+                <button type="button" class="chip-btn" onclick="setCashAmount(1000)">+₹1,000</button>
+                <button type="button" class="chip-btn" onclick="setCashAmount(2000)">+₹2,000</button>
+                <button type="button" class="chip-btn" onclick="setCashAmount(5000)">+₹5,000</button>
+              </div>
+              <div id="cashForecaster" style="margin-top:8px; font-size:12px; color:var(--text-muted);"></div>
+            </div>
+
+            <div class="form-group" id="cashPinGroup" style="display:none;">
+              <label for="cashPin">Security PIN Verification</label>
+              <div class="input-with-icon">
+                <span class="input-icon">🔒</span>
+                <input type="password" id="cashPin" placeholder="••••" maxlength="6">
+              </div>
+            </div>
+
+            <button type="submit" class="primary-btn" id="cashSubmitBtn">
+              <span id="cashSubmitLabel">Deposit into Account</span>
+              <span>→</span>
+            </button>
+          </form>
+        </div>
+
+        <!-- PANE 3: PASSBOOK & TRANSACTION LEDGER -->
+        <div class="hub-content-pane" id="pane-ledger">
+          <div class="ledger-controls">
+            <div>
+              <h3 style="font-size:18px;">Official Account Passbook</h3>
+              <p style="color:var(--text-muted); font-size:13px;">Full immutable audit trail of all transactions.</p>
+            </div>
+            <div style="display:flex; gap:10px; align-items:center;">
+              <button class="icon-btn" onclick="openStatementModal()">🖨️ Print Statement</button>
+            </div>
+          </div>
+
+          <div class="ledger-filters" style="margin-bottom:14px;">
+            <button class="filter-btn active" onclick="filterTransactions('ALL', this)">All</button>
+            <button class="filter-btn" onclick="filterTransactions('DEPOSIT', this)">Deposits</button>
+            <button class="filter-btn" onclick="filterTransactions('WITHDRAW', this)">Withdrawals</button>
+          </div>
+
+          <div class="table-responsive">
+            <table class="ledger-table">
+              <thead>
+                <tr>
+                  <th>Date & Time</th>
+                  <th>Transaction Type</th>
+                  <th>Status</th>
+                  <th style="text-align:right;">Amount (Rs.)</th>
+                </tr>
+              </thead>
+              <tbody id="ledgerTableBody">
+                <!-- Dynamically populated -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- PANE 4: INTEREST CALCULATOR -->
+        <div class="hub-content-pane" id="pane-interest">
+          <h3 style="font-size:18px; margin-bottom:10px;">Interest Accrual & Growth Projection</h3>
+          <p style="color:var(--text-muted); font-size:13px; margin-bottom:20px;">
+            Apex Savings accounts earn 4.00% annual interest credited to your balance. Current accounts have overdraft
+            privileges.
+          </p>
+
+          <div
+            style="background:var(--bg-surface); padding:20px; border-radius:var(--radius-md); border:1px solid var(--border-subtle); max-width:560px;">
+            <div style="display:flex; justify-content:space-between; margin-bottom:12px;">
+              <span style="font-weight:600; font-size:13px;">Simulate Additional Deposit:</span>
+              <span style="font-family:var(--font-mono); font-weight:700; color:var(--brand-accent);"
+                id="simAddedDisplay">+Rs.10,000</span>
+            </div>
+            <input type="range" id="simSlider" min="0" max="100000" step="5000" value="10000"
+              style="width:100%; margin-bottom:18px;" oninput="calculateSimInterest()">
+
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:14px;">
+              <div style="background:var(--bg-elevated); padding:14px; border-radius:var(--radius-sm);">
+                <small style="color:var(--text-muted); display:block;">1-Year Interest Earnings</small>
+                <strong style="font-size:20px; color:var(--ok); font-family:var(--font-mono);"
+                  id="sim1Year">Rs.0.00</strong>
+              </div>
+              <div style="background:var(--bg-elevated); padding:14px; border-radius:var(--radius-sm);">
+                <small style="color:var(--text-muted); display:block;">Projected Total Balance</small>
+                <strong style="font-size:20px; color:var(--text-main); font-family:var(--font-mono);"
+                  id="simTotal">Rs.0.00</strong>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- PANE 5: SECURITY CONTROLS -->
+        <div class="hub-content-pane" id="pane-security">
+          <h3 style="font-size:18px; margin-bottom:10px;">Account Security & Debit Card Controls</h3>
+          <p style="color:var(--text-muted); font-size:13px; margin-bottom:24px;">
+            Manage your card freeze state, update security PIN, and configure electronic authorization.
+          </p>
+
+          <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(280px, 1fr)); gap:20px;">
+            <!-- Freeze Card -->
+            <div
+              style="background:var(--bg-surface); padding:20px; border-radius:var(--radius-md); border:1px solid var(--border-subtle);">
+              <h4 style="font-size:15px; margin-bottom:8px;">Instant Card Freeze / Lock</h4>
+              <p style="font-size:12.5px; color:var(--text-muted); margin-bottom:16px;">
+                Temporarily freeze your debit card. All outgoing withdrawals and transfers will be immediately blocked
+                until unlocked.
+              </p>
+              <div class="form-group">
+                <label for="freezePin">Enter Security PIN to confirm</label>
+                <input type="password" id="freezePin" placeholder="••••" maxlength="6" class="form-input">
+              </div>
+              <button type="button" class="primary-btn" id="freezeToggleBtn" onclick="handleCardFreeze()"
+                style="background:var(--bad);">
+                <span id="freezeBtnText">Freeze Debit Card</span>
+              </button>
+            </div>
+
+            <!-- Change PIN -->
+            <div
+              style="background:var(--bg-surface); padding:20px; border-radius:var(--radius-md); border:1px solid var(--border-subtle);">
+              <h4 style="font-size:15px; margin-bottom:8px;">Change Security PIN</h4>
+              <p style="font-size:12.5px; color:var(--text-muted); margin-bottom:16px;">
+                Update your 4-digit security PIN used for ATM access and transfers.
+              </p>
+              <form onsubmit="handleChangePin(event)">
+                <div class="form-group">
+                  <label for="oldPin">Current PIN</label>
+                  <input type="password" id="oldPin" placeholder="••••" maxlength="6" required class="form-input">
+                </div>
+                <div class="form-group">
+                  <label for="newPin">New 4-Digit PIN</label>
+                  <input type="password" id="newPin" placeholder="••••" maxlength="6" required class="form-input">
+                </div>
+                <button type="submit" class="primary-btn">Update PIN</button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ========================================================================
+     STATEMENT PRINT SLIP MODAL
+     ======================================================================== -->
+  <div class="statement-modal-overlay" id="statementModal" onclick="closeStatementModal(event)">
+    <div class="statement-paper" onclick="event.stopPropagation()">
+      <div
+        style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:20px; border-bottom:2px solid #0f172a; padding-bottom:14px;">
+        <div>
+          <h2 style="font-size:22px; font-weight:800; color:#0f172a;">APEX RESERVE BANK</h2>
+          <p style="font-size:12px; color:#475569;">Official Customer Account Statement</p>
+        </div>
+        <div style="text-align:right;">
+          <span style="font-size:12px; font-weight:700; color:#0f172a;" id="slipDate"></span>
+          <p style="font-size:11px; color:#475569;">Ref: APX-SEC-STMT</p>
+        </div>
+      </div>
+
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:24px; font-size:13px;">
+        <div>
+          <strong>Holder Name:</strong> <span id="slipHolderName"></span><br>
+          <strong>Account No:</strong> <span id="slipAccountNo"></span><br>
+          <strong>Phone:</strong> <span id="slipPhone"></span>
+        </div>
+        <div style="text-align:right;">
+          <strong>Account Type:</strong> <span id="slipType"></span><br>
+          <strong>Net Ledger Balance:</strong> <span id="slipBalance"
+            style="font-weight:700; font-size:15px; color:#0284c7;"></span>
+        </div>
+      </div>
+
+      <h4 style="font-size:14px; text-transform:uppercase; margin-bottom:10px; color:#334155;">Transaction Audit Trail
+      </h4>
+      <table style="width:100%; border-collapse:collapse; font-size:12px; margin-bottom:24px;">
+        <thead>
+          <tr style="border-bottom:1px solid #cbd5e1; text-align:left;">
+            <th style="padding:6px 0;">Date/Time</th>
+            <th style="padding:6px 0;">Type</th>
+            <th style="padding:6px 0;">Status</th>
+            <th style="padding:6px 0; text-align:right;">Amount (Rs.)</th>
+          </tr>
+        </thead>
+        <tbody id="slipTxBody"></tbody>
+      </table>
+
+      <div class="no-print"
+        style="display:flex; justify-content:flex-end; gap:10px; border-top:1px solid #e2e8f0; padding-top:16px;">
+        <button class="icon-btn" onclick="window.print()">🖨️ Print Now</button>
+        <button class="icon-btn" onclick="closeStatementModal()">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================================
+     TOAST NOTIFICATIONS CONTAINER
+     ======================================================================== -->
+  <div id="toast-container"></div>
+
+  <!-- ========================================================================
+     APPLICATION LOGIC (VANILLA JS)
+     ======================================================================== -->
+  <script>
+    // ---------- GLOBAL STATE ----------
+    const state = {
+      token: localStorage.getItem('apex_token') || null,
+      account: null,
+      hideBalance: false,
+      soundEnabled: true,
+      audioCtx: null
+    };
+
+    // Web Audio API Synthesizer for pleasant tactile feedback
+    function playSound(type) {
+      if (!state.soundEnabled) return;
+      try {
+        if (!state.audioCtx) {
+          state.audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        }
+        const ctx = state.audioCtx;
+        if (ctx.state === 'suspended') ctx.resume();
+
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+
+        if (type === 'success') {
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(523.25, ctx.currentTime); // C5
+          osc.frequency.exponentialRampToValueAtTime(783.99, ctx.currentTime + 0.12); // G5
+          gain.gain.setValueAtTime(0.12, ctx.currentTime);
+          gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.25);
+          osc.start();
+          osc.stop(ctx.currentTime + 0.26);
+        } else if (type === 'error') {
+          osc.type = 'sawtooth';
+          osc.frequency.setValueAtTime(220, ctx.currentTime);
+          osc.frequency.linearRampToValueAtTime(140, ctx.currentTime + 0.2);
+          gain.gain.setValueAtTime(0.1, ctx.currentTime);
+          gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.22);
+          osc.start();
+          osc.stop(ctx.currentTime + 0.23);
+        } else {
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(800, ctx.currentTime);
+          gain.gain.setValueAtTime(0.04, ctx.currentTime);
+          gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.05);
+          osc.start();
+          osc.stop(ctx.currentTime + 0.06);
+        }
+      } catch (e) {
+        // Audio context may be restricted before interaction
+      }
+    }
+
+    function toggleAudio() {
+      state.soundEnabled = !state.soundEnabled;
+      document.getElementById('audioIcon').textContent = state.soundEnabled ? '🔊' : '🔇';
+      showToast(state.soundEnabled ? 'Sound feedback enabled' : 'Sound muted', 'info');
+    }
+
+    function toggleTheme() {
+      const current = document.documentElement.getAttribute('data-theme');
+      const next = current === 'dark' ? 'light' : 'dark';
+      document.documentElement.setAttribute('data-theme', next);
+      document.getElementById('themeIcon').textContent = next === 'dark' ? '☀️' : '🌙';
+      localStorage.setItem('apex_theme', next);
+    }
+
+    // Restore saved theme
+    (function initTheme() {
+      const saved = localStorage.getItem('apex_theme') || 'dark';
+      document.documentElement.setAttribute('data-theme', saved);
+      document.getElementById('themeIcon').textContent = saved === 'dark' ? '☀️' : '🌙';
+    })();
+
+    // ---------- TOAST NOTIFICATIONS ----------
+    function showToast(message, type = 'info') {
+      playSound(type === 'ok' ? 'success' : type === 'bad' ? 'error' : 'click');
+      const container = document.getElementById('toast-container');
+      const toast = document.createElement('div');
+      toast.className = `toast toast-${type}`;
+      const icon = type === 'ok' ? '✅' : type === 'bad' ? '⚠️' : 'ℹ️';
+      toast.innerHTML = `<span style="font-size:18px;">${icon}</span><div><strong style="display:block; font-size:13px;">${message}</strong></div>`;
+      container.appendChild(toast);
+      setTimeout(() => {
+        toast.style.opacity = '0';
+        toast.style.transform = 'translateY(10px)';
+        toast.style.transition = 'all 0.25s ease';
+        setTimeout(() => toast.remove(), 260);
+      }, 3800);
+    }
+
+    // ---------- API CLIENT HELPER ----------
+    async function api(path, data = {}) {
+      const headers = { 'Content-Type': 'application/x-www-form-urlencoded' };
+      if (state.token) {
+        headers['Authorization'] = `Bearer ${state.token}`;
+        data.token = state.token;
+      }
+      const body = new URLSearchParams(data).toString();
+      try {
+        const res = await fetch(`/api/${path}`, {
+          method: 'POST',
+          headers,
+          body
+        });
+        return await res.json();
+      } catch (err) {
+        return { ok: false, message: 'Network or server communication error.' };
+      }
+    }
+
+    // ---------- NAVIGATION & VIEWS ----------
+    function showView(viewId) {
+      document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active'));
+      const target = document.getElementById(viewId);
+      if (target) target.classList.add('active');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function navigateHome() {
+      if (state.token && state.account) {
+        showView('view-dashboard');
+      } else {
+        showView('view-auth');
+      }
+    }
+
+    function toggleAdminView() {
+      const adminView = document.getElementById('view-admin');
+      if (adminView.classList.contains('active')) {
+        navigateHome();
+      } else {
+        showView('view-admin');
+        loadAdminAccounts();
+      }
+    }
+
+    // ---------- AUTHENTICATION ACTIONS ----------
+    function switchAuthTab(mode) {
+      playSound('click');
+      const btnLogin = document.getElementById('tabBtnLogin');
+      const btnRegister = document.getElementById('tabBtnRegister');
+      const formLogin = document.getElementById('loginForm');
+      const formRegister = document.getElementById('registerForm');
+
+      if (mode === 'login') {
+        btnLogin.classList.add('active');
+        btnRegister.classList.remove('active');
+        formLogin.style.display = 'block';
+        formRegister.style.display = 'none';
+      } else {
+        btnRegister.classList.add('active');
+        btnLogin.classList.remove('active');
+        formLogin.style.display = 'none';
+        formRegister.style.display = 'block';
+      }
+    }
+
+    function selectAccountType(type) {
+      playSound('click');
+      document.getElementById('regType').value = type;
+      document.getElementById('optSavings').classList.toggle('selected', type === 'savings');
+      document.getElementById('optCurrent').classList.toggle('selected', type === 'current');
+      const notice = document.getElementById('regMinNotice');
+      if (type === 'savings') {
+        notice.textContent = 'Minimum opening deposit for Savings: ₹500 (Earns 4% p.a.)';
+        document.getElementById('regAmount').value = '5000';
+      } else {
+        notice.textContent = 'Current Account: Zero minimum balance, ₹10,000 overdraft protection';
+        document.getElementById('regAmount').value = '10000';
+      }
+    }
+
+    function quickFillLogin(acc, pin) {
+      switchAuthTab('login');
+      document.getElementById('loginId').value = acc;
+      document.getElementById('loginPin').value = pin;
+      showToast(`Loaded ${acc} credentials. Signing in...`, 'info');
+      document.getElementById('loginForm').dispatchEvent(new Event('submit'));
+    }
+
+    function togglePinVisibility(inputId) {
+      const input = document.getElementById(inputId);
+      if (input.type === 'password') {
+        input.type = 'text';
+      } else {
+        input.type = 'password';
+      }
+    }
+
+    async function handleLogin(e) {
+      e.preventDefault();
+      const loginId = document.getElementById('loginId').value.trim();
+      const pin = document.getElementById('loginPin').value.trim();
+      const btn = document.getElementById('loginSubmitBtn');
+      btn.disabled = true;
+
+      const res = await api('login', { loginId, pin });
+      btn.disabled = false;
+
+      if (res.ok) {
+        state.token = res.token;
+        state.account = res.account;
+        localStorage.setItem('apex_token', res.token);
+        showToast(res.message || 'Authenticated successfully!', 'ok');
+        renderDashboard();
+        showView('view-dashboard');
+      } else {
+        showToast(res.message || 'Login failed', 'bad');
+      }
+    }
+
+    async function handleRegister(e) {
+      e.preventDefault();
+      const name = document.getElementById('regName').value.trim();
+      const phone = document.getElementById('regPhone').value.trim();
+      const type = document.getElementById('regType').value.trim();
+      const amount = document.getElementById('regAmount').value.trim();
+      const pin = document.getElementById('regPin').value.trim();
+      const btn = document.getElementById('regSubmitBtn');
+      btn.disabled = true;
+
+      const res = await api('register', { name, phone, type, amount, pin });
+      btn.disabled = false;
+
+      if (res.ok) {
+        state.token = res.token;
+        state.account = res.account;
+        localStorage.setItem('apex_token', res.token);
+        showToast(res.message || 'Account opened successfully!', 'ok');
+        renderDashboard();
+        showView('view-dashboard');
+      } else {
+        showToast(res.message || 'Account opening failed', 'bad');
+      }
+    }
+
+    async function handleLogout() {
+      playSound('click');
+      await api('logout', { token: state.token });
+      state.token = null;
+      state.account = null;
+      localStorage.removeItem('apex_token');
+      showToast('Logged out securely.', 'info');
+      updateSessionHeader();
+      showView('view-auth');
+    }
+
+    // ---------- REFRESH PROFILE ----------
+    async function refreshAccount() {
+      if (!state.token) return;
+      const res = await api('me');
+      if (res.ok && res.account) {
+        state.account = res.account;
+        renderDashboard();
+      } else {
+        state.token = null;
+        state.account = null;
+        localStorage.removeItem('apex_token');
+        updateSessionHeader();
+        showView('view-auth');
+      }
+    }
+
+    // ---------- DASHBOARD RENDERING ----------
+    function renderDashboard() {
+      const acc = state.account;
+      if (!acc) return;
+
+      updateSessionHeader();
+
+      // Header info
+      document.getElementById('dashHolderName').textContent = acc.name;
+      document.getElementById('dashPhone').textContent = acc.phone || 'N/A';
+      document.getElementById('dashAccountTypeTag').textContent =
+        acc.type.toUpperCase() + (acc.type.toLowerCase() === 'savings' ? ' PLATINUM' : ' PREMIER');
+
+      // Virtual Card
+      const cardEl = document.getElementById('virtualCardElement');
+      cardEl.className = `debit-card card-${acc.type.toLowerCase()} ${acc.frozen ? 'is-frozen' : ''}`;
+      document.getElementById('cardTierBadge').textContent = acc.type.toUpperCase();
+      document.getElementById('cardAccNumber').textContent = acc.no;
+      document.getElementById('cardHolderName').textContent = acc.name.toUpperCase();
+
+      // Freeze Button in Security
+      const freezeBtn = document.getElementById('freezeToggleBtn');
+      const freezeBtnText = document.getElementById('freezeBtnText');
+      if (acc.frozen) {
+        freezeBtn.style.background = 'var(--ok)';
+        freezeBtnText.textContent = 'Unlock / Unfreeze Debit Card';
+      } else {
+        freezeBtn.style.background = 'var(--bad)';
+        freezeBtnText.textContent = 'Freeze Debit Card';
+      }
+
+      // Wealth Stats
+      renderBalances();
+
+      // Passbook Table
+      renderLedgerTable(acc.transactions || []);
+
+      // Sim interest
+      calculateSimInterest();
+    }
+
+    function renderBalances() {
+      const acc = state.account;
+      if (!acc) return;
+      const statBal = document.getElementById('statBalance');
+      const statAvail = document.getElementById('statAvailable');
+      const statInt = document.getElementById('statInterest');
+
+      if (state.hideBalance) {
+        statBal.textContent = 'Rs. ••••••';
+        statAvail.textContent = 'Rs. ••••••';
+        statInt.textContent = 'Rs. ••••••';
+      } else {
+        statBal.textContent = `Rs.${acc.balance.toFixed(2)}`;
+        statAvail.textContent = `Rs.${acc.available.toFixed(2)}`;
+        statInt.textContent = `Rs.${acc.interest.toFixed(2)}`;
+      }
+
+      document.getElementById('statAvailableSub').textContent =
+        acc.type.toLowerCase() === 'savings'
+          ? 'Minimum balance of Rs.500 retained'
+          : 'Includes Rs.10,000 overdraft limit';
+    }
+
+    function toggleBalancePrivacy() {
+      playSound('click');
+      state.hideBalance = !state.hideBalance;
+      document.getElementById('privacyEyeIcon').textContent = state.hideBalance ? '🔒' : '👁️';
+      renderBalances();
+    }
+
+    function copyAccountNumber() {
+      if (!state.account) return;
+      navigator.clipboard.writeText(state.account.no);
+      showToast(`Account number ${state.account.no} copied to clipboard!`, 'ok');
+    }
+
+    function updateSessionHeader() {
+      const slot = document.getElementById('sessionHeaderSlot');
+      if (state.token && state.account) {
+        const initial = state.account.name ? state.account.name.charAt(0).toUpperCase() : 'U';
+        slot.innerHTML = `
+      <div class="user-badge-wrap">
+        <div class="user-avatar">${initial}</div>
+        <div class="user-info">
+          <div>${state.account.name.split(' ')[0]}</div>
+          <small>${state.account.no}</small>
+        </div>
+        <button class="btn-signout" onclick="handleLogout()" title="Lock & Sign Out">Exit</button>
+      </div>
+    `;
+      } else {
+        slot.innerHTML = '';
+      }
+    }
+
+    // ---------- HUB TABS ----------
+    function switchHubPane(paneId) {
+      playSound('click');
+      document.querySelectorAll('.hub-tab-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.hub-content-pane').forEach(p => p.classList.remove('active'));
+
+      const tabBtn = document.getElementById(`hubTab${paneId.charAt(0).toUpperCase() + paneId.slice(1)}`);
+      const pane = document.getElementById(`pane-${paneId}`);
+      if (tabBtn) tabBtn.classList.add('active');
+      if (pane) pane.classList.add('active');
+    }
+
+    // ---------- TRANSFER ACTIONS ----------
+    let recipientCheckTimeout = null;
+    function checkRecipientDebounced(accNo) {
+      clearTimeout(recipientCheckTimeout);
+      const box = document.getElementById('recipientVerifiedBox');
+      const txt = document.getElementById('recipientVerifiedText');
+      if (!accNo || accNo.trim().length < 3) {
+        box.classList.remove('visible');
+        return;
+      }
+      recipientCheckTimeout = setTimeout(async () => {
+        try {
+          const res = await fetch(`/api/recipient?acc=${encodeURIComponent(accNo.trim())}`);
+          const data = await res.json();
+          if (data.ok) {
+            box.classList.add('visible');
+            txt.textContent = `Verified: ${data.name} (${data.type})`;
+          } else {
+            box.classList.remove('visible');
+          }
+        } catch (e) {
+          box.classList.remove('visible');
+        }
+      }, 350);
+    }
+
+    function setTransferAmount(amt) {
+      playSound('click');
+      const input = document.getElementById('tfAmount');
+      input.value = (parseFloat(input.value || 0) + amt).toFixed(2);
+    }
+
+    async function handleTransfer(e) {
+      e.preventDefault();
+      const to = document.getElementById('tfRecipient').value.trim();
+      const amount = document.getElementById('tfAmount').value.trim();
+      const pin = document.getElementById('tfPin').value.trim();
+      const btn = document.getElementById('transferSubmitBtn');
+      btn.disabled = true;
+
+      const res = await api('transfer', { to, amount, pin });
+      btn.disabled = false;
+
+      if (res.ok) {
+        showToast(res.message, 'ok');
+        document.getElementById('tfAmount').value = '';
+        document.getElementById('tfPin').value = '';
+        document.getElementById('recipientVerifiedBox').classList.remove('visible');
+        refreshAccount();
+      } else {
+        showToast(res.message || 'Transfer failed', 'bad');
+      }
+    }
+
+    // ---------- CASH ACTIONS (DEPOSIT & WITHDRAW) ----------
+    function switchCashMode(mode) {
+      playSound('click');
+      document.getElementById('cashMode').value = mode;
+      document.getElementById('btnModeDeposit').classList.toggle('active', mode === 'deposit');
+      document.getElementById('btnModeWithdraw').classList.toggle('active', mode === 'withdraw');
+
+      const lbl = document.getElementById('cashAmountLabel');
+      const btnLbl = document.getElementById('cashSubmitLabel');
+      const pinGrp = document.getElementById('cashPinGroup');
+
+      if (mode === 'deposit') {
+        lbl.textContent = 'Deposit Amount (Rs.)';
+        btnLbl.textContent = 'Deposit into Account';
+        pinGrp.style.display = 'none';
+      } else {
+        lbl.textContent = 'Withdrawal Amount (Rs.)';
+        btnLbl.textContent = 'Authorize Withdrawal';
+        pinGrp.style.display = 'block';
+      }
+      calcRemainingBalance();
+    }
+
+    function setCashAmount(amt) {
+      playSound('click');
+      const input = document.getElementById('cashAmount');
+      input.value = (parseFloat(input.value || 0) + amt).toFixed(2);
+      calcRemainingBalance();
+    }
+
+    function calcRemainingBalance() {
+      const mode = document.getElementById('cashMode').value;
+      const amt = parseFloat(document.getElementById('cashAmount').value) || 0;
+      const curBal = state.account ? state.account.balance : 0;
+      const forecaster = document.getElementById('cashForecaster');
+      if (amt <= 0) {
+        forecaster.textContent = '';
+        return;
+      }
+
+      const nextBal = mode === 'deposit' ? curBal + amt : curBal - amt;
+      forecaster.textContent = `Projected balance after transaction: Rs.${nextBal.toFixed(2)}`;
+    }
+
+    async function handleCashAction(e) {
+      e.preventDefault();
+      const mode = document.getElementById('cashMode').value;
+      const amount = document.getElementById('cashAmount').value.trim();
+      const pin = document.getElementById('cashPin').value.trim();
+      const btn = document.getElementById('cashSubmitBtn');
+      btn.disabled = true;
+
+      const endpoint = mode === 'deposit' ? 'deposit' : 'withdraw';
+      const res = await api(endpoint, { amount, pin });
+      btn.disabled = false;
+
+      if (res.ok) {
+        showToast(res.message, 'ok');
+        document.getElementById('cashAmount').value = '';
+        document.getElementById('cashPin').value = '';
+        document.getElementById('cashForecaster').textContent = '';
+        refreshAccount();
+      } else {
+        showToast(res.message || 'Operation failed', 'bad');
+      }
+    }
+
+    // ---------- PASSBOOK / LEDGER TABLE ----------
+    function renderLedgerTable(transactions, filter = 'ALL') {
+      const tbody = document.getElementById('ledgerTableBody');
+      tbody.innerHTML = '';
+
+      const filtered = transactions.filter(t => {
+        if (filter === 'ALL') return true;
+        if (filter === 'DEPOSIT') return t.type.includes('DEPOSIT') || t.type.includes('OPEN');
+        if (filter === 'WITHDRAW') return t.type.includes('WITHDRAW');
+        return true;
+      });
+
+      if (!filtered.length) {
+        tbody.innerHTML = `<tr><td colspan="4" style="text-align:center; color:var(--text-muted); padding:24px;">No transaction records found.</td></tr>`;
+        return;
+      }
+
+      filtered.slice().reverse().forEach(t => {
+        const row = document.createElement('tr');
+        const isSuccess = t.status === 'SUCCESS';
+        const isInflow = t.type.includes('DEPOSIT') || t.type.includes('OPEN');
+        const badgeClass = isInflow ? 'tx-inflow' : 'tx-outflow';
+        const sign = isInflow ? '+' : '-';
+        const amountColor = isInflow ? 'var(--ok)' : 'var(--bad)';
+
+        row.innerHTML = `
+      <td style="color:var(--text-muted); font-size:12.5px;">${t.date}</td>
+      <td>
+        <span class="tx-type-badge ${badgeClass}">
+          ${isInflow ? '↓' : '↑'} ${t.type}
+        </span>
+      </td>
+      <td>
+        <span style="font-size:12px; font-weight:700; color:${isSuccess ? 'var(--ok)' : 'var(--bad)'};">
+          ${t.status}
+        </span>
+      </td>
+      <td style="text-align:right; font-family:var(--font-mono); font-weight:700; color:${amountColor}; font-size:14.5px;">
+        ${sign}Rs.${t.amount.toFixed(2)}
+      </td>
+    `;
+        tbody.appendChild(row);
+      });
+    }
+
+    function filterTransactions(type, btn) {
+      playSound('click');
+      document.querySelectorAll('.ledger-filters .filter-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      if (state.account) {
+        renderLedgerTable(state.account.transactions || [], type);
+      }
+    }
+
+    // ---------- SIMULATOR CALCULATOR ----------
+    function calculateSimInterest() {
+      const acc = state.account;
+      const added = parseFloat(document.getElementById('simSlider').value) || 0;
+      document.getElementById('simAddedDisplay').textContent = `+Rs.${added.toLocaleString()}`;
+
+      const currentBal = acc ? acc.balance : 0;
+      const total = currentBal + added;
+      const rate = acc && acc.type.toLowerCase() === 'savings' ? 0.04 : 0.0;
+      const earnings = total * rate;
+
+      document.getElementById('sim1Year').textContent = `Rs.${earnings.toFixed(2)}`;
+      document.getElementById('simTotal').textContent = `Rs.${(total + earnings).toFixed(2)}`;
+    }
+
+    // ---------- SECURITY ACTIONS ----------
+    async function handleCardFreeze() {
+      const pin = document.getElementById('freezePin').value.trim();
+      const res = await api('freeze', { pin });
+      if (res.ok) {
+        showToast(res.message, 'ok');
+        document.getElementById('freezePin').value = '';
+        refreshAccount();
+      } else {
+        showToast(res.message || 'Action failed', 'bad');
+      }
+    }
+
+    async function handleChangePin(e) {
+      e.preventDefault();
+      const oldPin = document.getElementById('oldPin').value.trim();
+      const newPin = document.getElementById('newPin').value.trim();
+
+      const res = await api('change-pin', { oldPin, newPin });
+      if (res.ok) {
+        showToast(res.message, 'ok');
+        document.getElementById('oldPin').value = '';
+        document.getElementById('newPin').value = '';
+      } else {
+        showToast(res.message || 'PIN update failed', 'bad');
+      }
+    }
+
+    // ---------- STATEMENT PRINT MODAL ----------
+    function openStatementModal() {
+      playSound('click');
+      const acc = state.account;
+      if (!acc) return;
+
+      document.getElementById('slipDate').textContent = new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
+      document.getElementById('slipHolderName').textContent = acc.name;
+      document.getElementById('slipAccountNo').textContent = acc.no;
+      document.getElementById('slipPhone').textContent = acc.phone || 'N/A';
+      document.getElementById('slipType').textContent = acc.type.toUpperCase();
+      document.getElementById('slipBalance').textContent = `Rs.${acc.balance.toFixed(2)}`;
+
+      const tbody = document.getElementById('slipTxBody');
+      tbody.innerHTML = '';
+      (acc.transactions || []).forEach(t => {
+        const row = document.createElement('tr');
+        row.style.borderBottom = '1px solid #f1f5f9';
+        row.innerHTML = `
+      <td style="padding:6px 0;">${t.date}</td>
+      <td style="padding:6px 0;">${t.type}</td>
+      <td style="padding:6px 0;">${t.status}</td>
+      <td style="padding:6px 0; text-align:right; font-family:var(--font-mono); font-weight:600;">Rs.${t.amount.toFixed(2)}</td>
+    `;
+        tbody.appendChild(row);
+      });
+
+      document.getElementById('statementModal').classList.add('active');
+    }
+
+    function closeStatementModal(e) {
+      if (e) e.stopPropagation();
+      document.getElementById('statementModal').classList.remove('active');
+    }
+
+    // ---------- ADMIN PORTAL LEDGER ----------
+    async function loadAdminAccounts() {
+      try {
+        const res = await fetch('/api/accounts');
+        const accounts = await res.json();
+        const tbody = document.getElementById('adminAccountsTableBody');
+        tbody.innerHTML = '';
+
+        if (!accounts.length) {
+          tbody.innerHTML = `<tr><td colspan="7" style="text-align:center; padding:20px;">No bank accounts found.</td></tr>`;
+          return;
+        }
+
+        accounts.forEach(a => {
+          const row = document.createElement('tr');
+          row.innerHTML = `
+        <td><strong style="font-family:var(--font-mono);">${a.no}</strong></td>
+        <td>${a.name}</td>
+        <td>${a.phone || '-'}</td>
+        <td><span class="tx-type-badge tx-neutral">${a.type}</span></td>
+        <td style="text-align:right; font-family:var(--font-mono); font-weight:700;">Rs.${a.balance.toFixed(2)}</td>
+        <td>
+          <span style="font-size:12px; font-weight:700; color:${a.frozen ? 'var(--bad)' : 'var(--ok)'};">
+            ${a.frozen ? 'FROZEN' : 'ACTIVE'}
+          </span>
+        </td>
+        <td>
+          <button class="icon-btn" style="color:var(--bad);" onclick="deleteAccount('${a.no}')">Close Account</button>
+        </td>
+      `;
+          tbody.appendChild(row);
+        });
+      } catch (err) {
+        showToast('Failed to load admin accounts ledger', 'bad');
+      }
+    }
+
+    async function deleteAccount(accNo) {
+      if (!confirm(`Are you sure you wish to close and terminate account ${accNo}? This is permanent.`)) return;
+      const res = await api('delete', { acc: accNo });
+      if (res.ok) {
+        showToast(res.message, 'ok');
+        loadAdminAccounts();
+        if (state.account && state.account.no === accNo) {
+          handleLogout();
+        }
+      } else {
+        showToast(res.message || 'Deletion failed', 'bad');
+      }
+    }
+
+    // ---------- INITIAL BOOTSTRAP ----------
+    (async function init() {
+      if (state.token) {
+        await refreshAccount();
+      } else {
+        showView('view-auth');
+      }
+    })();
+  </script>
+</body>
+
+</html>
