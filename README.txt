@@ -43,3 +43,20 @@ KEY FEATURES & SECURITY:
    - Dark Luxury Glassmorphism & Light Pearl themes with instant toggle.
    - Web Audio tactile sound effects.
    - Mask/reveal privacy eye for account balances.
+
+RENDER DEPLOYMENT (FREE HOSTING):
+---------------------------------
+Method 1 (Automatic Blueprint - Recommended):
+  1. Push code to GitHub:
+     git add .
+     git commit -m "Configure Render deployment"
+     git push origin main
+  2. Open https://dashboard.render.com/
+  3. Click 'New +' -> 'Blueprint' -> Select this repository.
+  4. Render reads render.yaml and deploys automatically!
+
+Method 2 (Manual Web Service):
+  1. Click 'New +' -> 'Web Service' -> Select repository.
+  2. Runtime: Docker (automatically detects Dockerfile).
+  3. Click 'Create Web Service'.
+
